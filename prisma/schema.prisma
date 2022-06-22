@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id Int @db.Integer @default(autoincrement()) @id
+  email String @unique @db.VarChar(255)
+  password String
+  role String @db.VarChar(255) @default("user") 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  categories Category[]
+  flashCards FlashCard[]
+}
+model Category {
+  id Int @db.Integer @default(autoincrement()) @id
+  name String @unique @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  categoryCreator User @relation(fields: [creatorId], references: [id])
+  creatorId Int
+  flashCards FlashCard[]
+}
+model FlashCard {
+  id Int @db.Integer @default(autoincrement()) @id
+  title String @unique @db.VarChar(255)
+  question String @db.VarChar(500)
+  answer String @db.VarChar(500)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  category Category @relation(fields: [categoryId], references: [id])
+  flashCardCreator User @relation(fields: [flashCardCreatorId], references: [id])
+  flashCardCreatorId Int
+  categoryId Int
+}

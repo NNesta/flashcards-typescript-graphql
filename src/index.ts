@@ -1,9 +1,10 @@
-import express, { Express } from "express";
+import express from "express";
+import { createUser } from "./utils"
 
 const PORT = process.env.PORT || 4000;
 const main = async () => {
     const app = express();
-    app.get('/', (_req: any, res: { send: (arg0: string) => any; }) => res.send("Hello World"));
+    app.get('/', (_req, res) => res.send("Hello world"));
     app.listen(PORT, ()=>console.log(`Server started on port ${PORT}`))
     
 }
