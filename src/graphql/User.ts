@@ -1,4 +1,4 @@
-import { extendType, objectType, intArg, enumType } from 'nexus';
+import { extendType, objectType, intArg, enumType, nonNull } from 'nexus';
 
 export const Role = enumType({
   name: "Role",
@@ -46,6 +46,10 @@ export const userQuery = extendType({
       },
       async resolve(_, args, ctx) {
         let user;
+        const { role, userId } = ctx;
+        if (role !== "ADMIN" && args.index !== userId) {
+          throw new Error("You are not allowed to see users")
+        }
         user = await ctx.prisma.user.findUnique(
           {
             where: {
@@ -60,12 +64,62 @@ export const userQuery = extendType({
       type: "AllUser",
       async resolve(_parent, _args, ctx) {
         let users;
+        const { role } = ctx;
+        if (role !== "ADMIN") {
+          throw new Error("You are not allowed to see users")
+        }
         users = await ctx.prisma.user.findMany();
-        console.log(users)
         return {users}
       }
 
     })
       ;
+  }
+})
+export const userMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.field('assignRole', {
+      type: "User",
+      args: {
+        index: nonNull(intArg()),
+        role: Role
+      },
+      async resolve(_parent, args, ctx) {
+        const { role } = ctx;
+        if (role !== "ADMIN") {
+          throw new Error("Not Allowed to assign role")
+        }
+        const user = await ctx.prisma.user.update({
+          where: {
+            id: args.index
+          },
+          data: {
+              role: args.role,
+          }
+          
+        })
+        return user;
+      }
+    })
+    t.field('deleteUser', {
+      type: "User",
+      args: {
+        index: nonNull(intArg()),
+      },
+      async resolve(_parent, args, ctx) {
+        const { role } = ctx;
+        if (role !== "ADMIN") {
+          throw new Error("Not Allowed to delete user")
+        }
+        const user = await ctx.prisma.user.delete({
+          where: {
+            id: args.index
+          }
+          
+        })
+        return user;
+      }
+    })
   }
 })

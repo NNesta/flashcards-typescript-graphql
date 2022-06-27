@@ -137,10 +137,12 @@ export interface NexusGenFieldTypes {
     question: string; // String!
   }
   Mutation: { // field return type
+    assignRole: NexusGenRootTypes['User'] | null; // User
     createCategory: NexusGenRootTypes['Category']; // Category!
     createFlashcard: NexusGenRootTypes['Flashcard'] | null; // Flashcard
     deleteCategory: NexusGenRootTypes['Category']; // Category!
     deleteFlashcard: NexusGenRootTypes['Flashcard']; // Flashcard!
+    deleteUser: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateCategory: NexusGenRootTypes['Category']; // Category!
@@ -197,10 +199,12 @@ export interface NexusGenFieldTypeNames {
     question: 'String'
   }
   Mutation: { // field return type name
+    assignRole: 'User'
     createCategory: 'Category'
     createFlashcard: 'Flashcard'
     deleteCategory: 'Category'
     deleteFlashcard: 'Flashcard'
+    deleteUser: 'User'
     login: 'AuthPayload'
     signup: 'AuthPayload'
     updateCategory: 'Category'
@@ -226,6 +230,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    assignRole: { // args
+      index: number; // Int!
+      role?: NexusGenEnums['Role'] | null; // Role
+    }
     createCategory: { // args
       description: string; // String!
       name: string; // String!
@@ -240,6 +248,9 @@ export interface NexusGenArgTypes {
     }
     deleteFlashcard: { // args
       id: number; // Int!
+    }
+    deleteUser: { // args
+      index: number; // Int!
     }
     login: { // args
       email: string; // String!

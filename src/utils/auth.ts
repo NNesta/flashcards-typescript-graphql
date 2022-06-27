@@ -5,6 +5,7 @@ export const APP_SECRET = 'supersecret';
 export interface AuthTokenPayload {
   // 1
   userId: number;
+  role: string;
 }
 
 export function decodeAuthHeader(authHeader: String): AuthTokenPayload {

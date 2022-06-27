@@ -27,7 +27,7 @@ export const AuthMutation = extendType({
           where: { email: args.email },
         });
         if (!user) {
-          throw new Error('No such user found');
+          throw new Error('User not found');
         }
 
         const valid = await bcrypt.compare(args.password, user.password);
@@ -35,7 +35,7 @@ export const AuthMutation = extendType({
           throw new Error('Invalid password');
         }
 
-        const token = jwt.sign({ userId: user.id }, APP_SECRET);
+        const token = jwt.sign({ userId: user.id, role: user.role }, APP_SECRET);
 
         return {
           token,
