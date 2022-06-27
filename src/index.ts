@@ -1,11 +1,18 @@
-import express from "express";
-import { createUser } from "./utils"
+import { ApolloServer } from 'apollo-server';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { context } from './context';
 
-const PORT = process.env.PORT || 4000;
-const main = async () => {
-    const app = express();
-    app.get('/', (_req, res) => res.send("Hello world"));
-    app.listen(PORT, ()=>console.log(`Server started on port ${PORT}`))
-    
-}
-main().catch((err) =>console.error(err))
+import { schema } from './schema';
+const PORT = process.env.PORT || 4000
+export const app = new ApolloServer({
+  schema,
+  context,
+  introspection: true,
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+});
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+})
+
+
+
