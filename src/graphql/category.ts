@@ -23,7 +23,6 @@ export const Category = objectType({
         t.field('categoryCreator', {
             type: 'User',
             resolve(parent, _, ctx) {
-                console.log(ctx);
                 return ctx.prisma.category
                     .findUnique({ where: { id: parent.id } })
                     .categoryCreator();
@@ -144,8 +143,6 @@ export const CategoryMutation = extendType({
             resolve(_, args, ctx) {
                 const { name, description, } = args;
                 const { userId } = ctx;
-                console.log(userId)
-
                 if (!userId) {
                     throw new Error('Please Log in');
                 }
@@ -156,8 +153,6 @@ export const CategoryMutation = extendType({
                         categoryCreator: { connect: { id: userId } },
                     },
                 });
-                console.log(newCategory)
-
                 return newCategory;
             },
         });

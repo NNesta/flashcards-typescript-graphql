@@ -18,21 +18,23 @@ model User {
   role                  String
   flashcards            Flashcard[]
   categories            Category[]
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
 }
 
 model Category {
   id                    Int          @id @default(autoincrement())
-  createdAt             DateTime     @default(now())
   name                  String       @unique
   description           String   
   isActive              Boolean      @default(false)
   categoryCreator       User?        @relation(fields: [categoryCreatorId], references: [id])
   categoryCreatorId     Int?
   flashCards            Flashcard[]
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
 }
 model Flashcard {
   id                    Int          @id @default(autoincrement())
-  createdAt             DateTime     @default(now())
   question              String
   answer                String   
   isReady               Boolean      @default(false)
@@ -40,4 +42,6 @@ model Flashcard {
   category              Category?    @relation(fields: [categoryId], references: [id])
   flashCardCreatorId    Int?
   categoryId            Int?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
 }

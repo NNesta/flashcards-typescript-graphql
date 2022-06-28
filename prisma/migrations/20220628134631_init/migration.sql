@@ -5,6 +5,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -12,11 +14,12 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Category" (
     "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT false,
     "categoryCreatorId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
@@ -24,12 +27,13 @@ CREATE TABLE "Category" (
 -- CreateTable
 CREATE TABLE "Flashcard" (
     "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "question" TEXT NOT NULL,
     "answer" TEXT NOT NULL,
     "isReady" BOOLEAN NOT NULL DEFAULT false,
     "flashCardCreatorId" INTEGER,
     "categoryId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Flashcard_pkey" PRIMARY KEY ("id")
 );
