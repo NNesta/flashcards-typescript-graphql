@@ -56,12 +56,13 @@ input FlashcardOrderByInput {
 }
 
 type Mutation {
+  assignRole(index: Int!, role: Role!): User!
   createCategory(description: String!, name: String!): Category!
   createFlashcard(answer: String!, category: String!, question: String!): Flashcard
   deleteCategory(id: Int!): Category!
   deleteFlashcard(id: Int!): Flashcard!
   login(email: String!, password: String!): AuthPayload!
-  signup(email: String!, name: String!, password: String!): AuthPayload!
+  signup(email: String!, name: String!, password: String!): User!
   updateCategory(id: Int!, isActive: Boolean, name: String): Category!
   updateFlashcard(answer: String, category: String, id: Int!, isReady: Boolean, question: String): Flashcard!
 }

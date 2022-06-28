@@ -1,4 +1,4 @@
-import { extendType, objectType, intArg, enumType } from 'nexus';
+import { extendType, objectType, intArg, enumType, nonNull } from 'nexus';
 
 export const Role = enumType({
   name: "Role",
@@ -45,8 +45,11 @@ export const userQuery = extendType({
         index: intArg(),
       },
       async resolve(_, args, ctx) {
-        let user;
-        user = await ctx.prisma.user.findUnique(
+        const { role, userId } = ctx;
+        if (role !== "ADMIN" || args.index !== userId) {
+          throw new Error("Only admin can see other user")
+        }
+        const user = await ctx.prisma.user.findUnique(
           {
             where: {
               id: args.index
@@ -59,13 +62,44 @@ export const userQuery = extendType({
     t.nonNull.field('users', {
       type: "AllUser",
       async resolve(_parent, _args, ctx) {
-        let users;
-        users = await ctx.prisma.user.findMany();
-        console.log(users)
+        const { role } = ctx;
+        if (role !== "ADMIN") {
+          throw new Error("Only Admin can see all users")
+        }
+        const users = await ctx.prisma.user.findMany();
         return {users}
       }
 
     })
       ;
+  }
+})
+export const userMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.nonNull.field('assignRole', {
+      type: 'User',
+      args: {
+        index: nonNull(intArg()),
+        role: nonNull(Role),
+      },
+      async resolve(_, args, ctx) {
+        const { role } = ctx;
+        if (role !== "ADMIN") {
+          throw new Error("Only admin can assign role")
+        }
+        const user = await ctx.prisma.user.update(
+          {
+            where: {
+              id: args.index,
+            },
+            data: {
+              role: args.role,
+            }
+          }
+        )
+        return user;
+      },
+    });
   }
 })
