@@ -4,8 +4,6 @@
 
 type AllCategories {
   categories: [Category]!
-  count: Int!
-  id: ID
 }
 
 type AllFlashcards {
@@ -47,6 +45,7 @@ type Flashcard {
   id: Int!
   isReady: Boolean!
   question: String!
+  updatedAt: String!
 }
 
 input FlashcardOrderByInput {
@@ -71,7 +70,7 @@ type Query {
   categories(filter: String, orderBy: [CategoryOrderByInput!], skip: Int, take: Int): AllCategories!
   category(index: Int): Category!
   flashcard(index: Int): Flashcard!
-  flashcards(filter: String, orderBy: [FlashcardOrderByInput!], skip: Int, take: Int): AllFlashcards!
+  flashcards(category: Int, filter: String, orderBy: [FlashcardOrderByInput!], skip: Int, take: Int): AllFlashcards!
   user(index: Int): User!
   users: AllUser!
 }
