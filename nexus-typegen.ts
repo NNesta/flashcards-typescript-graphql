@@ -58,8 +58,6 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   AllCategories: { // root type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
-    count: number; // Int!
-    id?: string | null; // ID
   }
   AllFlashcards: { // root type
     flashcards: Array<NexusGenRootTypes['Flashcard'] | null>; // [Flashcard]!
@@ -83,6 +81,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     isReady: boolean; // Boolean!
     question: string; // String!
+    updatedAt: string; // String!
   }
   Mutation: {};
   Query: {};
@@ -107,8 +106,6 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   AllCategories: { // field return type
     categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
-    count: number; // Int!
-    id: string | null; // ID
   }
   AllFlashcards: { // field return type
     flashcards: Array<NexusGenRootTypes['Flashcard'] | null>; // [Flashcard]!
@@ -135,6 +132,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     isReady: boolean; // Boolean!
     question: string; // String!
+    updatedAt: string; // String!
   }
   Mutation: { // field return type
     assignRole: NexusGenRootTypes['User']; // User!
@@ -168,8 +166,6 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   AllCategories: { // field return type name
     categories: 'Category'
-    count: 'Int'
-    id: 'ID'
   }
   AllFlashcards: { // field return type name
     flashcards: 'Flashcard'
@@ -196,6 +192,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     isReady: 'Boolean'
     question: 'String'
+    updatedAt: 'String'
   }
   Mutation: { // field return type name
     assignRole: 'User'
@@ -283,6 +280,7 @@ export interface NexusGenArgTypes {
       index?: number | null; // Int
     }
     flashcards: { // args
+      category?: number | null; // Int
       filter?: string | null; // String
       orderBy?: NexusGenInputs['FlashcardOrderByInput'][] | null; // [FlashcardOrderByInput!]
       skip?: number | null; // Int

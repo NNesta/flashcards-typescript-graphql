@@ -21,6 +21,7 @@ export const Flashcard = objectType({
     t.nonNull.string('answer');
     t.nonNull.boolean('isReady');
     t.nonNull.string('createdAt')
+    t.nonNull.string('updatedAt')
     t.field('flashCardCreator', {
       type: 'User',
       resolve(parent, _, ctx) {
@@ -66,7 +67,6 @@ export const FlashcardQuery = extendType({
   definition(t) {
     t.nonNull.field('flashcard', {
       type: 'Flashcard',
-
       args: {
         index: intArg(),
       },
@@ -90,6 +90,7 @@ export const FlashcardQuery = extendType({
         skip: intArg(),
         take: intArg(),
         orderBy: arg({ type: list(nonNull(FlashcardOrderByInput)) }),
+        category: intArg(),
       },
       async resolve(_, args, ctx) {
         let flashcards;
@@ -104,7 +105,13 @@ export const FlashcardQuery = extendType({
               | Prisma.Enumerable<Prisma.FlashcardOrderByWithRelationInput>
               | undefined,
           });
-        } else {
+        }
+          else if (args.category) {
+            flashcards = await ctx.prisma.flashcard.findMany({
+              where: { categoryId: args.category },
+            });
+          }
+         else {
           const where = args.filter
             ? {
               OR: [

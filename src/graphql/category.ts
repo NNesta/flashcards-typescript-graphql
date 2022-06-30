@@ -22,10 +22,11 @@ export const Category = objectType({
         t.nonNull.string('createdAt');
         t.field('categoryCreator', {
             type: 'User',
-            resolve(parent, _, ctx) {
-                return ctx.prisma.category
+            async resolve(parent, _, ctx) {
+                const user = await ctx.prisma.category
                     .findUnique({ where: { id: parent.id } })
                     .categoryCreator();
+                return user
             },
         });
     },
@@ -48,8 +49,6 @@ export const AllCategories = objectType({
     name: 'AllCategories',
     definition(t) {
         t.nonNull.list.field('categories', { type: Category });
-        t.nonNull.int('count');
-        t.id('id');
     },
 });
 
@@ -85,7 +84,6 @@ export const CategoryQuery = extendType({
             },
             async resolve(_, args, ctx) {
                 let categories;
-                let count;
                 if (args.filter === 'true' || args.filter === 'false') {
                     const isActive = args.filter === 'true' ? true : false;
 
@@ -97,7 +95,6 @@ export const CategoryQuery = extendType({
                             | Prisma.Enumerable<Prisma.CategoryOrderByWithRelationInput>
                             | undefined,
                     });
-                    count = await ctx.prisma.category.count({ where: { isActive } });
                 } else {
                     const where = args.filter
                         ? {
@@ -116,14 +113,9 @@ export const CategoryQuery = extendType({
                             | undefined,
                     });
 
-                    count = await ctx.prisma.category.count({ where });
                 }
-                const id = JSON.stringify(args);
-
                 return {
                     categories,
-                    count,
-                    id,
                 };
             },
         });
