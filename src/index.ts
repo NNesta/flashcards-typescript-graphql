@@ -11,7 +11,7 @@ export const app = new ApolloServer({
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
 });
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server is running on ${PORT}`);
 })
 
 
